@@ -1,15 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <CloudImage path="folder/myfile.gif"/>
+    <input type="file" ref="myfile">
+    <button @click="upload">upload</button>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import {storage} from "./firebase" 
+import {ref, uploadBytes} from "firebase/storage"
+import CloudImage from "./components/CloudImage.vue";
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components:{
+    CloudImage
+  },
+  methods:{
+    upload: function(){
+      const storageRef = ref(storage, 'folder/myfile.gif');
+      uploadBytes(storageRef, this.$refs.myfile.files[0]).then(
+      /* eslint-disable */
+      (snapshot)=> {
+          console.log("uploaded")
+      })
+    }
   }
 }
 </script>
